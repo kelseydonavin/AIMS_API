@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// adding comments to commit 2/7/2020
+
 //import graphqlhttp from 'express-graphql';
 //import {buildSchema} from 'graphql';
 //
