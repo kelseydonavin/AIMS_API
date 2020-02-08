@@ -4,9 +4,28 @@
  * Module dependencies.
  */
 
+const {ApolloServer} = require('apollo-server-express'); //curly braces deconstruct the function and pull out only what you need
+const firebase = require('firebase'); 
+const typeDefs = require('../typedefs');
+const resolvers = require('../resolvers'); //pulling in local library
+
 var app = require('../app');
 var debug = require('debug')('paddle-backend:server');
 var http = require('http');
+
+ // Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyBMxQRrVT5EhphWuCNrS88quzerzOcK9-Q",
+  authDomain: "paddle-80c1e.firebaseapp.com",
+  databaseURL: "https://paddle-80c1e.firebaseio.com",
+  projectId: "paddle-80c1e",
+  storageBucket: "paddle-80c1e.appspot.com",
+  messagingSenderId: "1027671416064",
+  appId: "1:1027671416064:web:e431d42d24f650c48727e5"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 /**
  * Get port from environment and store in Express.
@@ -19,15 +38,34 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+//var server = http.createServer(app);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  //header info so when send request to firebase itll have config info in it
+  context: ({
+    req
+  })=> {
+    return{
+      headers: req.headers,
+      firebaseConfig
+    };
+  }
+});
+
+server.applyMiddleware({app});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+// server.listen(port);
+// server.on('error', onError);
+// server.on('listening', onListening);
+
+app.listen({port: 4000}, ()=> {
+  console.log("server has started.")
+})
 
 /**
  * Normalize a port into a number, string, or false.
