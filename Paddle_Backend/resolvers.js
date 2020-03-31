@@ -3,8 +3,8 @@ const userProfile = require('./userProfile')
 //how we are telling gql to get the data.
 const resolvers = {
     Query: {
-        users: async () => {
-            const data = await fetch(`${baseURL}/users.json`); // change this to our file
+        players: async () => {
+            const data = await fetch(`${baseURL}/players.json`); // change this to our file
             const dataJson = await data.json();
             const keys = Object.keys(dataJson);
             const mapsKeys = keys.map(function (item) {
